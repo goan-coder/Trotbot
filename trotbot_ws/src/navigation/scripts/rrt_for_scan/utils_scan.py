@@ -13,7 +13,8 @@ ALPHA = 10
 
 def make_obstacles_scan(scan_list):
 	
-	pt_ang = np.arange(0,2*np.pi,np.pi/180)
+	#pt_ang = np.arange(0,2*np.pi,np.pi/180) #ojit's
+	pt_ang = np.arange(0,2*np.pi,np.pi/320)
 	pt_scan = np.array(scan_list)
 	pts = []
 	pt_x = np.multiply(pt_scan,np.cos(pt_ang))
@@ -22,9 +23,12 @@ def make_obstacles_scan(scan_list):
 	for a,b in zip(pt_x,pt_y):
 		pts.append((a,b))
 
+
 	pt_scan = np.array(scan_list)
+	pt_scan = pt_scan[~np.isnan(pt_scan)] #for us
 	pt_scan_prev = np.append(pt_scan[1:],pt_scan[0])
-	# print(pt_scan_prev-pt_scan)
+	print(pt_scan_prev-pt_scan)
+	
 	line_obst = abs(pt_scan_prev - pt_scan)>2*THRESHOLD
 	ind=np.argwhere(line_obst==True)
 	ind  = np.append(0 , ind)
@@ -158,9 +162,13 @@ def visualize_scan(path, scan_list):
 			Nothing. Function is used to visualize path.
 	"""
 	
+	print "I am in visualize_scan"
+	#pt_ang = np.arange(0,2*np.pi,np.pi/180) #for ojit
 	
-	pt_ang = np.arange(0,2*np.pi,np.pi/180)
 	pt_scan = np.array(scan_list)
+	pt_scan = pt_scan[~np.isnan(pt_scan)] #for us
+	shape_unit = len(pt_scan)/2
+	pt_ang = np.arange(0,2*np.pi,np.pi/shape_unit)
 	pts = []
 	pt_x = np.multiply(pt_scan,np.cos(pt_ang))
 	pt_y = np.multiply(pt_scan,np.sin(pt_ang))
